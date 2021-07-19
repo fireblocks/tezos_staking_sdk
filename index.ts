@@ -20,10 +20,9 @@ const reveal = false;
 Params: 
     1. FireblocksSDK instance
     2. Tezos public RPC url
-    3. Source wallet address (tz1...)
-    4. Destination baker's address (tz1...)
-    5. Vault account ID of the source 
-    6. Reveal - "true" in case the source address should be revealed (No any historical outgoing transaction) 
+    3. Destination baker's address (tz1...)
+    4. Vault account ID of the source 
+    5. Reveal - "true" in case the source address should be revealed (No any historical outgoing transaction) 
     
     NOTE: "REVEAL" should be done only on the FIRST OUTGOING source wallet's operation!
    
