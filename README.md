@@ -18,7 +18,7 @@
 
 **How to stake XTZ:**
 
-Run setDelegate(fireblocks, url, destination, vaultAccountId, reveal);
+Run - setDelegate(fireblocks, url, destination, vaultAccountId, reveal);
 
 **Parameters:**
 
