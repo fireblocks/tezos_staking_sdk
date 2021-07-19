@@ -22,8 +22,13 @@ Run - setDelegate(fireblocks, url, destination, vaultAccountId, reveal);
 
 **Parameters:**
 
-fireblocks = FireblocksSDK instance
-url = JSON RPC URL (set by default, can be changed to any other URL)
-destination = XTZ Baker address
-vaultAccountId = vault account id of the XTZ wallet
-reveal = if there is no any outgoing transaction were made out of this wallet - true, else - false
+1. fireblocks = FireblocksSDK instance
+
+2. url = JSON RPC URL (set by default, can be changed to any other URL)
+ 
+3. destination = XTZ Baker address
+ 
+4. vaultAccountId = vault account id of the XTZ wallet
+ 
+5. reveal = if there is no any outgoing transaction were made out of this wallet - true, else - false
+
