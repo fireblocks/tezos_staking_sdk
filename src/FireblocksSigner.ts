@@ -45,7 +45,7 @@ export class FireblocksSigner{
         const addressIndex: number = 0;
         
         const publicKeyInfo: PublicKeyInfoForVaultAccountArgs = {
-            assetId: 'XTZ',
+            assetId: 'XTZ', //XTZ_TEST for testnet
             vaultAccountId: parseInt(vaultAccountId),
             change: change,
             addressIndex: addressIndex
