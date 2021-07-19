@@ -10,7 +10,7 @@
 
     b. Designated Signer
 
-    c. Asset - DOT
+    c. Asset - XTZ
 
     d. Source (vault accounts) - Optional
 
