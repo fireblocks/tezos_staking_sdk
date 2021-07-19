@@ -1,0 +1,21 @@
+{
+  "name": "tezos_staking",
+  "version": "1.0.0",
+  "description": "Tezos Staking via Fireblocks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@taquito/http-utils": ">=9.2.0",
+    "@taquito/local-forging": ">=9.2.0",
+    "@taquito/taquito": ">=9.2.0",
+    "@taquito/utils": ">=9.2.0",
+    "fireblocks-sdk": ">=1.6.0",
+    "libsodium-wrappers": ">=0.7.9",
+    "ts-node": ">=10.1.0",
+    "typescript": ">=4.3.5"
+  }
+}
