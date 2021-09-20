@@ -2,7 +2,7 @@
 
 **Prerequisites:** 
 
-1. Enable RAW signing feature by contacting Fireblocks's support team
+1. Enable RAW signing feature by contacting Fireblocks' support team
 
 2. Set transaction authorization policy rule that governs the RAW signing operation, the policy should include the following parameters:
 
