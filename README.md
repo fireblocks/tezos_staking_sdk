@@ -20,6 +20,12 @@
 
 Run - setDelegate(fireblocks, url, destination, vaultAccountId, reveal);
 
+**How to unstake XTZ:**
+
+In case you want to empty the entire XTZ balance:
+
+ Run - setDelegate(fireblocks, url, "", vaultAccountId, reveal=false);
+
 **Parameters:**
 
 1. fireblocks = FireblocksSDK instance
