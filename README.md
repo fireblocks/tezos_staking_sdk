@@ -36,5 +36,5 @@ In case you want to empty the entire XTZ balance:
  
 4. vaultAccountId = vault account id of the XTZ wallet
  
-5. reveal = if there is no any outgoing transaction were made out of this wallet - true, else - false
+5. reveal = if there is no any outgoing transactions were made out of this wallet - true, else - false
 
