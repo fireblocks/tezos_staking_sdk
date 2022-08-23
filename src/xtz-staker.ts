@@ -9,13 +9,14 @@ export async function setDelegate(
     url: string, 
     destination: string, 
     vaultAccountId: string,
-    reveal: boolean
+    reveal: boolean,
+    testnet: boolean
 ): Promise<any>{
 
-    const fbSigner: FireblocksSigner = new FireblocksSigner(apiClient, url);
+    const fbSigner: FireblocksSigner = new FireblocksSigner(apiClient, url, testnet);
     const Tezos: TezosToolkit = new TezosToolkit(url);
     
-    const depositAddress: DepositAddressResponse[] = await apiClient.getDepositAddresses(vaultAccountId, 'XTZ');
+    const depositAddress: DepositAddressResponse[] = await apiClient.getDepositAddresses(vaultAccountId, testnet ? 'XTZ_TEST' : 'XTZ');
     const sourceAddress: string = depositAddress[0].address;
     
     console.log("My XTZ wallet's address: " + sourceAddress);

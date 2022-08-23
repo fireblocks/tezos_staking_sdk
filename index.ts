@@ -15,6 +15,7 @@ const url: string = "https://rpc.tzbeta.net/"; //testnet: https://testnet-tezos.
 const destination: string = "baker_address";   
 const vaultAccountId = 'vault_account_id'
 const reveal = false;
+const testnet = false;
 /* Set Delegate Operation: 
    
 Params: 
@@ -23,12 +24,13 @@ Params:
     3. Destination baker's address (tz1...)
     4. Vault account ID of the source 
     5. Reveal - "true" in case the source address should be revealed (No any historical outgoing transaction) 
+    6. Testnet - "true" in case using testnet.
     
     NOTE: "REVEAL" should be done only on the FIRST OUTGOING source wallet's operation!
    
     NOTE: For undelegate - pass empty string as destination 
 */
 
-setDelegate(fireblocks, url, destination, vaultAccountId, reveal);
+setDelegate(fireblocks, url, destination, vaultAccountId, reveal, testnet);
 
 

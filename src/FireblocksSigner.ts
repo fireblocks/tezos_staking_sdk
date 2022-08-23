@@ -27,12 +27,14 @@ export class FireblocksSigner{
     apiClient: FireblocksSDK;
     url: any;
     httpBackend: HttpBackend;
+    testnet: boolean;
   
-    constructor(apiClient: FireblocksSDK, url: any) {
+    constructor(apiClient: FireblocksSDK, url: any, testnet: boolean) {
         
         this.apiClient = apiClient;
         this.url = url;
         this.httpBackend = new HttpBackend();
+        this.testnet = testnet;
     }
   
     private createURL(path: string) {
@@ -45,7 +47,7 @@ export class FireblocksSigner{
         const addressIndex: number = 0;
         
         const publicKeyInfo: PublicKeyInfoForVaultAccountArgs = {
-            assetId: 'XTZ', //XTZ_TEST for testnet
+            assetId: this.testnet ? 'XTZ_TEST' : 'XTZ', //XTZ_TEST for testnet
             vaultAccountId: parseInt(vaultAccountId),
             change: change,
             addressIndex: addressIndex
