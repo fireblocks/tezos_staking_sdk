@@ -104,7 +104,7 @@ export class FireblocksSigner{
                 type: PeerType.VAULT_ACCOUNT,
                 id: vaultAccountId
             },
-            assetId: 'XTZ',
+            assetId: this.testnet ? 'XTZ_TEST' : 'XTZ',
             note: "Delegating Tezos to the following Baker's address: " + destination,
             extraParameters: { rawMessageData }
         }
