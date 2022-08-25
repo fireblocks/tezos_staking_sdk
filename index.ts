@@ -11,7 +11,7 @@ const fireblocks = new FireblocksSDK(apiSecret, apiKey);
 //Consts for delegation:
 
 // Tezos Public RPC url
-const url: string = "https://rpc.tzbeta.net/"; //testnet: https://testnet-tezos.giganode.io
+const url: string = "https://rpc.tzbeta.net/"; //testnet: https://ithacanet.tezos.marigold.dev/
 const destination: string = "baker_address";   
 const vaultAccountId = 'vault_account_id'
 const reveal = false;
