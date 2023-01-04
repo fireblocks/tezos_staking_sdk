@@ -26,7 +26,7 @@ Params:
     5. Reveal - "true" in case the source address should be revealed (No any historical outgoing transaction) 
     6. Testnet - "true" in case using testnet.
     
-    NOTE: "REVEAL" should be done only on the FIRST OUTGOING source wallet's operation!
+    NOTE: "REVEAL" should be done only on the FIRST OUTGOING source wallet's staking operation!
    
     NOTE: For undelegate - pass empty string as destination 
 */
