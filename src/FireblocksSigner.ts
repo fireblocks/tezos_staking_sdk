@@ -105,7 +105,7 @@ export class FireblocksSigner{
                 id: vaultAccountId
             },
             assetId: this.testnet ? 'XTZ_TEST' : 'XTZ',
-            note: "Delegating Tezos to the following Baker's address: " + destination,
+            note: "Delegating/Staking Tezos to the following address: " + destination,
             extraParameters: { rawMessageData }
         }
         
