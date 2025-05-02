@@ -121,7 +121,7 @@ export class FireblocksSigner{
                 throw Error("Exiting the operation");
             }
             console.log((await this.apiClient.getTransactionById(txId)).status);
-            setTimeout(() => { }, 1000);
+            await new Promise((resolve) => setTimeout(resolve, 1000));
             
             status = await this.apiClient.getTransactionById(txId);
         }

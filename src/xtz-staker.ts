@@ -16,6 +16,11 @@ export async function setDelegate(
     const fbSigner: FireblocksSigner = new FireblocksSigner(apiClient, url, testnet);
     const Tezos: TezosToolkit = new TezosToolkit(url);
     
+    console.log("Destination baker's address: " + destination);
+    console.log("Vault account ID: " + vaultAccountId);
+    console.log("Reveal: " + reveal);
+    console.log("Testnet: " + testnet);
+
     const depositAddress: DepositAddressResponse[] = await apiClient.getDepositAddresses(vaultAccountId, testnet ? 'XTZ_TEST' : 'XTZ');
     const sourceAddress: string = depositAddress[0].address;
     
@@ -90,7 +95,7 @@ export async function setDelegate(
  * @param apiClient 
  * @param url 
  * @param vaultAccountId 
- * @param amount
+ * @param amount in tez
  * @param testnet 
  */
 
@@ -101,6 +106,21 @@ export async function setStake(
     amount: string,
     testnet: boolean,
 ): Promise<String>{
+
+    // Validation
+    if (!vaultAccountId) {
+        throw new Error("Vault account ID is required");
+    }
+    if (!amount) {
+        throw new Error("Amount is required");
+    }
+    if (isNaN(parseFloat(amount))) {
+        throw new Error("Amount must be a number");
+    }
+    if (parseFloat(amount) <= 0) {
+        throw new Error("Amount must be greater than 0");
+    }
+
     const fbSigner: FireblocksSigner = new FireblocksSigner(apiClient, url, testnet);
     const Tezos: TezosToolkit = new TezosToolkit(url);
     
@@ -108,7 +128,7 @@ export async function setStake(
     const sourceAddress: string = depositAddress[0].address;
     
     console.log("My XTZ wallet's address: " + sourceAddress);
-    const amountMutez = typeof amount === 'string' ? amount : (parseFloat(amount) * 1_000_000).toFixed(0);
+    const amountMutez = (parseFloat(amount) * 1_000_000).toFixed(0);
 
     //Suggested values for fee, gasLimit and storageLimit:
     const fee: string = "1300";
@@ -137,7 +157,7 @@ export async function setStake(
         counter: nonce.toString(),
         gas_limit: gasLimit,
         storage_limit: storageLimit,
-        amount,
+        amount: amountMutez,
         destination: sourceAddress, // staking is a self-transfer
         parameters: {
             entrypoint: "stake",
