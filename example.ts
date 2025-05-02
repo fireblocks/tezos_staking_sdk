@@ -56,6 +56,15 @@ Params:
     NOTE: For undelegate - pass empty string as destination 
 */
 
-// setDelegate(fireblocks, url, destination, vaultAccountId, reveal, testnet);
-setStake(fireblocks, url, vaultAccountId, stakeAmount, testnet);
+async function main() {
+    await setDelegate(fireblocks, url, destination, vaultAccountId, reveal, testnet);
+    await setStake(fireblocks, url, vaultAccountId, stakeAmount, testnet);
+}
 
+main()
+    .then(() => {
+        console.log("Staking operation completed successfully");
+    })
+    .catch((error) => {
+        console.error("Error during staking operation:", error);
+    });
