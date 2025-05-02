@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { FireblocksSDK } from "fireblocks-sdk";
-import { setDelegate, setStake } from "./src/xtz-staker";
+import { setDelegate, setStake, setUnstake, finalizeUnstake } from "./src/xtz-staker";
 
 require("dotenv").config();
 
@@ -57,8 +57,18 @@ Params:
 */
 
 async function main() {
-    await setDelegate(fireblocks, url, destination, vaultAccountId, reveal, testnet);
-    await setStake(fireblocks, url, vaultAccountId, stakeAmount, testnet);
+    let delegateHash: string = "";
+    let stakeHash: string = "";
+    let unstakeHash: string = "";
+
+    delegateHash = await setDelegate(fireblocks, url, destination, vaultAccountId, reveal, testnet);
+    stakeHash = await setStake(fireblocks, url, vaultAccountId, stakeAmount, testnet, delegateHash);
+    unstakeHash = await setUnstake(fireblocks, url, vaultAccountId, stakeAmount, testnet, stakeHash);
+    
+    // the unbonding period is 4-5 cycles (about 10-11 days), during which the funds are locked and cannot be used.
+    // After the unbonding period, you can finalize the unstake operation.
+    //await finalizeUnstake(fireblocks, url, vaultAccountId, testnet);
+    console.log("Staking operation completed successfully");
 }
 
 main()

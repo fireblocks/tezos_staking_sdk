@@ -30,10 +30,11 @@ export async function getDepositAddress(
     vaultAccountId: string,
     testnet: boolean
 ): Promise<string> {
-    const depositAddresses: DepositAddressResponse[] = await apiClient.getDepositAddresses(
-        vaultAccountId,
-        testnet ? "XTZ_TEST" : "XTZ"
-    );
+    const depositAddresses: DepositAddressResponse[] =
+        await apiClient.getDepositAddresses(
+            vaultAccountId,
+            testnet ? "XTZ_TEST" : "XTZ"
+        );
     return depositAddresses[0].address;
 }
 
@@ -45,9 +46,50 @@ export async function getBlockInfo(
     sourceAddress: string
 ): Promise<{ blockHash: string; counter: number }> {
     const blockHeader: BlockHeaderResponse = await Tezos.rpc.getBlockHeader();
-    const counter: string = (await Tezos.rpc.getContract(sourceAddress)).counter;
+    const counter: string = (await Tezos.rpc.getContract(sourceAddress))
+        .counter;
     return {
         blockHash: blockHeader.hash,
         counter: parseInt(counter),
     };
+}
+
+/**
+ * Wait for a transaction to be confirmed.
+ */
+export async function waitForConfirmation(
+    Tezos: TezosToolkit,
+    operationHash: string
+): Promise<void> {
+    // Wait for a new block to be produced in the event reveal and delegate operations are also called
+    let block = await Tezos.rpc.getBlock();
+    let initialBlockHeight = block.header.level;
+    let blockHeight = block.header.level;
+    let confirmed = false;
+
+    while (operationHash) {
+        let block = await Tezos.rpc.getBlock();
+        if (block.header.level == blockHeight) {
+            console.log("Waiting for new block...");
+            await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait for 1 second before checking again
+            continue;
+        }
+        blockHeight = block.header.level;
+        if (!confirmed) {
+            const allOperations = block.operations.flat();
+            if (allOperations.find((op) => op.hash === operationHash)) {
+                console.log("Operation confirmed in block: " + blockHeight);
+                confirmed = true;
+            }
+        }
+        if (blockHeight - initialBlockHeight > 5) {
+            if (confirmed) {
+                break;
+            } else {
+                throw new Error("Operation not confirmed in 5 blocks");
+            }
+        }
+        console.log("Waiting 1 second for operation to be confirmed...");
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait for 1 second before checking again
+    }
 }

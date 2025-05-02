@@ -1,9 +1,9 @@
-import { OpKind,BlockHeaderResponse, OperationContentsTransaction, OperationContentsDelegation, OperationContentsReveal, OperationContents } from '@taquito/rpc';
+import { OpKind,BlockHeaderResponse, OperationContentsTransaction, OperationContentsDelegation, OperationContentsReveal, OperationContents, BlockResponse, PendingOperationsV2, PendingOperationsV1 } from '@taquito/rpc';
 import { TezosToolkit } from '@taquito/taquito';
 import { FireblocksSDK, DepositAddressResponse } from "fireblocks-sdk";
 import { FireblocksSigner } from './lib/FireblocksSigner';
 import { ForgeParams } from '@taquito/taquito';
-import { getBlockInfo, getDepositAddress, validateInputs } from './lib/utils';
+import { getBlockInfo, getDepositAddress, validateInputs, waitForConfirmation } from './lib/utils';
 
 export async function setDelegate(
     apiClient: FireblocksSDK, 
@@ -12,7 +12,7 @@ export async function setDelegate(
     vaultAccountId: string,
     reveal: boolean,
     testnet: boolean
-): Promise<any>{
+): Promise<string>{
 
     const fbSigner: FireblocksSigner = new FireblocksSigner(apiClient, url, testnet);
     const Tezos: TezosToolkit = new TezosToolkit(url);
@@ -81,11 +81,14 @@ export async function setDelegate(
         try{
             const injectMsg: string = await fbSigner.injectOperation(signedDelegateMsg);
             console.log("Successfully injected. Operation hash: " + injectMsg);
+            return injectMsg;
         }catch(e){
             console.log(JSON.stringify(e, null, 2));
+            throw e;
         }
     }catch(e){ 
         console.log("ForgeAndSign call error: " + e)
+        throw e;
     }; 
 }
 
@@ -94,7 +97,8 @@ export async function setStake(
     url: string,
     vaultAccountId: string,
     amount: string,
-    testnet: boolean
+    testnet: boolean,
+    awaitHash: string = ""
 ): Promise<string> {
     validateInputs(vaultAccountId, amount);
 
@@ -104,6 +108,11 @@ export async function setStake(
 
     console.log("My XTZ wallet's address: " + sourceAddress);
     const amountMutez = (parseFloat(amount) * 1_000_000).toFixed(0);
+
+    if (awaitHash) {
+        console.log("Waiting for confirmation of the previous operation...");
+        await waitForConfirmation(Tezos, awaitHash);
+    }
 
     const { blockHash, counter } = await getBlockInfo(Tezos, sourceAddress);
     console.log("Block Hash: " + blockHash);
@@ -144,7 +153,8 @@ export async function setUnstake(
     url: string,
     vaultAccountId: string,
     amount: string,
-    testnet: boolean
+    testnet: boolean,
+    awaitHash: string = ""
 ): Promise<string> {
     validateInputs(vaultAccountId, amount);
 
@@ -154,6 +164,11 @@ export async function setUnstake(
 
     console.log("My XTZ wallet's address: " + sourceAddress);
     const amountMutez = (parseFloat(amount) * 1_000_000).toFixed(0);
+
+    if (awaitHash) {
+        console.log("Waiting for confirmation of the previous operation...");
+        await waitForConfirmation(Tezos, awaitHash);
+    }
 
     const { blockHash, counter } = await getBlockInfo(Tezos, sourceAddress);
     console.log("Block Hash: " + blockHash);
