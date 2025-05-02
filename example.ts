@@ -36,11 +36,11 @@ const fireblocks = new FireblocksSDK(
 
 // Tezos Public RPC url
 const url: string = process.env.TEZOS_RPC_URL || "https://rpc.ghostnet.teztnets.com";
-const destination: string = process.env.TEZOS_BAKER_ADDRESS || "tz1..."; //Destination baker's address (tz1...)
-const vaultAccountId: string = process.env.FB_VAULT_ID || "0"; //Vault account ID of the source wallet
+const destination: string = process.env.TEZOS_BAKER_ADDRESS //Destination baker's address (tz1...)
+const vaultAccountId: string = process.env.FB_VAULT_ID //Vault account ID of the source wallet
 const reveal : boolean = process.env.REVEAL_ADDRESS === "true" ? true : false; //Reveal - "true" in case the source address should be revealed (No any historical outgoing transaction)
 const testnet: boolean = url === "https://rpc.ghostnet.teztnets.com"; 
-const stakeAmount: string = process.env.STAKE_AMOUNT || "0"; //Amount to stake (in tez) - 1 tez = 1_000_000 mutez
+const stakeAmount: string = process.env.STAKE_AMOUNT || "0"; //Only for stake, not for delegate. Amount to stake (in tez) - 1 tez = 1_000_000 mutez
 /* Set Delegate Operation: 
    
 Params: 
