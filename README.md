@@ -19,7 +19,7 @@ The Tezos staking flow involves the following steps:
 
 1. **Delegate**: Assign a baker to manage staking for your account.
 2. **Stake**: Lock a specific amount of XTZ for staking.
-3. **Undelegate**: Remove the delegation by setting the delegate to `null`.
+3. **Undelegate**: Remove the delegation by setting the delegate to `<empty string>`.
 4. **Unstake**: Unlock the staked amount of XTZ.
 5. **Finalize Unstake**: After the unbonding period (4-5 cycles, approximately 10-11 days), finalize the unstake operation to make the funds available.
 
@@ -46,9 +46,7 @@ To stake XTZ, follow these steps:
     );
 
 - **stakeAmount**: The amount to stake in tez 
-- **deledateHash**: If delegation is called prior to stake, the stake delegation hash operation to wait for completion.
-
---
+- **delegateHash**: If delegation is called prior to stake, the stake delegation hash operation to wait for completion.
 
 ## How to Unstake XTZ
 
@@ -86,8 +84,8 @@ To stake XTZ, follow these steps:
         testnet
     );
 
---
 
+## Environment Set Up
 **.env Configuration Parameters:**
 
 1. **FB_API_KEY**: Fireblocks API key (e.g., `"VVV-WWWW-XXX-YYY-ZZZ"`).
