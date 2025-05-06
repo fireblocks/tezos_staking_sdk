@@ -97,3 +97,5 @@ To stake XTZ, follow these steps:
 4. **TEZOS_RPC_URL**: JSON RPC URL for the Tezos network (e.g., `"https://rpc.ghostnet.teztnets.com"` for Ghostnet).
 
 5. **TEZOS_BAKER_ADDRESS**: XTZ Baker address (e.g., `"tz3ZmB8oWUmi8YZXgeRpgAcPnEMD8VgUa"`)
+
+6. **STAKE_AMOUNT**: A string representation of the amount to be staked, in tez (up to 6 decimal places) (e.g. `"0.123456"`)
