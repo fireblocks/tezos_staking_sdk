@@ -46,6 +46,8 @@ To stake XTZ, follow these steps:
     );
 
 - **stakeAmount**: The amount to stake in tez 
+- **deledateHash**: If delegation is called prior to stake, the stake delegation hash operation to wait for completion.
+
 --
 
 ## How to Unstake XTZ
@@ -85,6 +87,7 @@ To stake XTZ, follow these steps:
     );
 
 --
+
 **.env Configuration Parameters:**
 
 1. **FB_API_KEY**: Fireblocks API key (e.g., `"VVV-WWWW-XXX-YYY-ZZZ"`).
