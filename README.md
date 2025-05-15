@@ -2,39 +2,100 @@
 
 **Prerequisites:** 
 
-1. Enable RAW signing feature by contacting Fireblocks' support team
+1. Enable RAW signing feature by contacting Fireblocks' support team.
 
-2. Set transaction authorization policy rule that governs the RAW signing operation, the policy should include the following parameters:
+2. Set transaction authorization policy rule that governs the RAW signing operation. The policy should include the following parameters:
+    - **Initiator**
+    - **Designated Signer**
+    - **Asset**: XTZ (XTZ_TEST in Ghostnet)
+    - **Source (vault accounts)**: Optional
+    - **Authorizers**: Optional
 
-    a. Initiator
+---
 
-    b. Designated Signer
+## Overview of Staking Flow
 
-    c. Asset - XTZ
+The Tezos staking flow involves the following steps:
 
-    d. Source (vault accounts) - Optional
+1. **Delegate**: Assign a baker to manage staking for your account.
+2. **Stake**: Lock a specific amount of XTZ for staking.
+3. **Undelegate**: Remove the delegation by setting the delegate to `<empty string>`.
+4. **Unstake**: Unlock the staked amount of XTZ.
+5. **Finalize Unstake**: After the unbonding period (4-5 cycles, approximately 10-11 days), finalize the unstake operation to make the funds available.
 
-    e. Authorizers - Optional
+---
 
-**How to stake XTZ:**
+## How to Stake XTZ
 
-Run - setDelegate(fireblocks, url, destination, vaultAccountId, reveal);
+To stake XTZ, follow these steps:
 
-**How to unstake XTZ:**
+1. **Delegate to a Baker**:
+   ```typescript
+   setDelegate(fireblocks, url, destination, vaultAccountId, reveal, testnet);
 
-In case you want to empty the entire XTZ balance:
 
- Run - setDelegate(fireblocks, url, "", vaultAccountId, reveal=false);
+2. **Stake a specific amount to the delegated baker**:
+   ```typescript
+    setStake(
+        fireblocks, 
+        url, 
+        vaultAccountId, 
+        stakeAmount, 
+        testnet, 
+        delegateHash
+    );
 
-**Parameters:**
+- **stakeAmount**: The amount to stake in tez 
+- **delegateHash**: If delegation is called prior to stake, the stake delegation hash operation to wait for completion.
 
-1. fireblocks = FireblocksSDK instance
+## How to Unstake XTZ
 
-2. url = JSON RPC URL (set by default, can be changed to any other URL)
- 
-3. destination = XTZ Baker address
- 
-4. vaultAccountId = vault account id of the XTZ wallet
- 
-5. reveal = if there is no any outgoing transactions were made out of this wallet - true, else - false
+1. **Undelegate to a Baker**:
+   ```typescript
+    setDelegate(
+        fireblocks, 
+        url, 
+        "", 
+        vaultAccountId, 
+        false, 
+        testnet
+    );
 
+2. **Unstake the amount from the currently assigned Baker**:
+   ```typescript
+    setUnstake(
+        fireblocks, 
+        url, 
+        vaultAccountId, 
+        unstakeAmount, 
+        testnet, 
+        undelegateHash
+    );
+
+- **unstakeAmount**: The amount to unstake in tez 
+- **undelegateHash**: The hash to wait for the undelegate operation to be processed prior to submitting the unstake
+
+3. **Finalise the unstake operation**
+   ```typescript
+    finalizeUnstake(
+        fireblocks, 
+        url, 
+        vaultAccountId, 
+        testnet
+    );
+
+
+## Environment Set Up
+**.env Configuration Parameters:**
+
+1. **FB_API_KEY**: Fireblocks API key (e.g., `"VVV-WWWW-XXX-YYY-ZZZ"`).
+
+2. **FB_API_SECRET_FILE_PATH**: Path to the Fireblocks API secret key file (e.g., `./config/fireblocks-secret.key`).
+
+3. **FB_VAULT_ID**: Vault account ID of the XTZ wallet (e.g., `"2"`).
+
+4. **TEZOS_RPC_URL**: JSON RPC URL for the Tezos network (e.g., `"https://rpc.ghostnet.teztnets.com"` for Ghostnet).
+
+5. **TEZOS_BAKER_ADDRESS**: XTZ Baker address (e.g., `"tz3ZmB8oWUmi8YZXgeRpgAcPnEMD8VgUa"`)
+
+6. **STAKE_AMOUNT**: A string representation of the amount to be staked, in tez (up to 6 decimal places) (e.g. `"0.123456"`)
