@@ -30,12 +30,18 @@ export async function getDepositAddress(
     vaultAccountId: string,
     testnet: boolean
 ): Promise<string> {
-    const depositAddresses: DepositAddressResponse[] =
-        await apiClient.getDepositAddresses(
-            vaultAccountId,
-            testnet ? "XTZ_TEST" : "XTZ"
-        );
-    return depositAddresses[0].address;
+    try {
+        const depositAddresses: DepositAddressResponse[] =
+            await apiClient.getDepositAddresses(
+                vaultAccountId,
+                testnet ? "XTZ_TEST" : "XTZ"
+            );
+        return depositAddresses[0].address;
+    }
+    catch (e) {
+        console.error("Error fetching deposit address:" + e);
+        throw e;
+    }
 }
 
 /**
@@ -45,13 +51,18 @@ export async function getBlockInfo(
     Tezos: TezosToolkit,
     sourceAddress: string
 ): Promise<{ blockHash: string; counter: number }> {
-    const blockHeader: BlockHeaderResponse = await Tezos.rpc.getBlockHeader();
-    const counter: string = (await Tezos.rpc.getContract(sourceAddress))
-        .counter;
-    return {
-        blockHash: blockHeader.hash,
-        counter: parseInt(counter),
-    };
+    try {
+        const blockHeader: BlockHeaderResponse = await Tezos.rpc.getBlockHeader();
+        const counter: string = (await Tezos.rpc.getContract(sourceAddress))
+            .counter;
+        return {
+            blockHash: blockHeader.hash,
+            counter: parseInt(counter),
+        };
+    } catch (e) {
+        console.error("Error fetching block info:" + e);
+        throw e;
+    }
 }
 
 /**
@@ -68,28 +79,34 @@ export async function waitForConfirmation(
     let confirmed = false;
 
     while (operationHash) {
-        let block = await Tezos.rpc.getBlock();
-        if (block.header.level == blockHeight) {
-            console.log("Waiting for new block...");
+        try {
+            let block = await Tezos.rpc.getBlock();
+            if (block.header.level == blockHeight) {
+                console.log("Waiting for new block...");
+                await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait for 1 second before checking again
+                continue;
+            }
+            blockHeight = block.header.level;
+            if (!confirmed) {
+                const allOperations = block.operations.flat();
+                if (allOperations.find((op) => op.hash === operationHash)) {
+                    console.log("Operation confirmed in block: " + blockHeight);
+                    confirmed = true;
+                }
+            }
+            if (blockHeight - initialBlockHeight > 5) {
+                if (confirmed) {
+                    break;
+                } else {
+                    throw new Error("Operation not confirmed in 5 blocks");
+                }
+            }
+            console.log("Waiting 1 second for operation to be confirmed...");
             await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait for 1 second before checking again
-            continue;
         }
-        blockHeight = block.header.level;
-        if (!confirmed) {
-            const allOperations = block.operations.flat();
-            if (allOperations.find((op) => op.hash === operationHash)) {
-                console.log("Operation confirmed in block: " + blockHeight);
-                confirmed = true;
-            }
+        catch (e) {
+            console.error("Error waiting for confirmation: " + e);
+            throw e;
         }
-        if (blockHeight - initialBlockHeight > 5) {
-            if (confirmed) {
-                break;
-            } else {
-                throw new Error("Operation not confirmed in 5 blocks");
-            }
-        }
-        console.log("Waiting 1 second for operation to be confirmed...");
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait for 1 second before checking again
     }
 }

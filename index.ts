@@ -42,6 +42,8 @@ const stakeAmount: string = process.env.STAKE_AMOUNT || "0";                    
 async function main() {
     let delegateHash: string = "";
     let stakeHash: string = "";
+
+    let undelegateHash: string = "";
     let unstakeHash: string = "";
 
     delegateHash = await setDelegate(fireblocks, url, destination, vaultAccountId, reveal, testnet);
@@ -53,9 +55,8 @@ async function main() {
      * After the unbonding period, you can finalize the unstake operation.
      * To undelegate, pass null as destination
      */
-    let undelegateHash: string = "";
-    undelegateHash = await setDelegate(fireblocks, url, null, vaultAccountId, false, testnet);
-    unstakeHash = await setUnstake(fireblocks, url, vaultAccountId, stakeAmount, testnet, undelegateHash);
+    unstakeHash = await setUnstake(fireblocks, url, vaultAccountId, stakeAmount, testnet, stakeHash);
+    undelegateHash = await setDelegate(fireblocks, url, null, vaultAccountId, false, testnet, unstakeHash);
     
     await finalizeUnstake(fireblocks, url, vaultAccountId, testnet);
     console.log("Undelegate/ unstaking operation completed successfully");
