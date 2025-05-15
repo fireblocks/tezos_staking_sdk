@@ -24,9 +24,6 @@ import {
     waitForConfirmation,
 } from "./lib/utils";
 
-
-
-
 export async function setDelegate(
     apiClient: FireblocksSDK,
     url: string,
