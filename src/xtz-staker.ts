@@ -30,7 +30,8 @@ export async function setDelegate(
     destination: string,
     vaultAccountId: string,
     reveal: boolean,
-    testnet: boolean
+    testnet: boolean,
+    awaitHash: string = ""
 ): Promise<string> {
     const fbSigner: FireblocksSigner = new FireblocksSigner(
         apiClient,
@@ -43,6 +44,11 @@ export async function setDelegate(
     console.log("Vault account ID: " + vaultAccountId);
     console.log("Reveal: " + reveal);
     console.log("Testnet: " + testnet);
+
+    if (awaitHash) {
+        console.log("Waiting for confirmation of the previous operation...");
+        await waitForConfirmation(Tezos, awaitHash);
+    }
 
     const depositAddress: DepositAddressResponse[] =
         await apiClient.getDepositAddresses(
@@ -117,7 +123,7 @@ export async function setDelegate(
         const injectMsg: string = await fbSigner.injectOperation(
             signedDelegateMsg
         );
-        console.log("Successfully injected. Operation hash: " + injectMsg);
+        console.log(`Successfully injected ${destination? "delegation" : "undelegation"}. Operation hash: ` + injectMsg);
         return injectMsg;
     } catch (e) {
         console.log("ForgeAndSign call error: " + e);
@@ -181,7 +187,7 @@ export async function setStake(
             sourceAddress
         );
         const injectMsg = await fbSigner.injectOperation(signedDelegateMsg);
-        console.log("Successfully injected. Operation hash: " + injectMsg);
+        console.log("Successfully injected staking operation. Operation hash: " + injectMsg);
         return injectMsg;
     } catch (e) {
         console.error("Error during staking operation:" + e);
