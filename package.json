@@ -12,7 +12,7 @@
     "@taquito/http-utils": "^21.0.0",
     "@taquito/local-forging": "^21.0.0",
     "@taquito/taquito": "^21.0.0",
-    "@taquito/utils": "^21.0.0",
+    "@taquito/utils": "^21.0.5",
     "dotenv": "^16.5.0",
     "fireblocks-sdk": ">=1.6.0",
     "libsodium-wrappers": ">=0.7.9",
