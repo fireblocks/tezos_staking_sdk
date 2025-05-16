@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@taquito/http-utils": "^21.0.0",
+    "@taquito/http-utils": "^21.0.5",
     "@taquito/local-forging": "^21.0.0",
     "@taquito/taquito": "^21.0.0",
     "@taquito/utils": "^21.0.0",
